@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-system">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rebbax - kchrobak.pl</title>
+  <meta name="description" content="Krzysztof Chrobak's personal space - articles, tech demos, and more in retro Windows 95 style.">
+  <script type="module" crossorigin src="/assets/main-J7tECPTe.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-B_Sc99mo.css">
+</head>
+<body>
+  <div class="desktop">
+    <!-- Main Window -->
+    <div class="window">
+      <!-- Title Bar -->
+      <div class="title-bar">
+        <div class="title-bar-text">
+          <span class="icon icon-computer"></span>
+          <span id="window-title-text">article-1.md</span>
+        </div>
+        <div class="title-bar-controls">
+          <button aria-label="Minimize" class="control-btn minimize-btn"></button>
+          <button aria-label="Maximize" class="control-btn maximize-btn"></button>
+          <button aria-label="Close" class="control-btn close-btn" onclick="window.location.href='/'"></button>
+        </div>
+      </div>
+
+      <!-- Menu Bar -->
+      <div class="menu-bar">
+        <div class="menu-item" id="menu-file">
+          <span class="menu-trigger"><u>F</u>ile</span>
+          <div class="dropdown-menu">
+            <div class="dropdown-item disabled">Open...</div>
+            <div class="dropdown-item disabled">Save</div>
+            <hr class="menu-hr">
+            <div class="dropdown-item" id="menu-exit">Exit</div>
+          </div>
+        </div>
+        <div class="menu-item" id="menu-edit">
+          <span class="menu-trigger"><u>E</u>dit</span>
+          <div class="dropdown-menu">
+            <div class="dropdown-item disabled">Undo</div>
+            <hr class="menu-hr">
+            <div class="dropdown-item disabled">Cut</div>
+            <div class="dropdown-item disabled">Copy</div>
+            <div class="dropdown-item disabled">Paste</div>
+          </div>
+        </div>
+        <div class="menu-item" id="menu-view">
+          <span class="menu-trigger"><u>V</u>iew</span>
+          <div class="dropdown-menu">
+            <div class="dropdown-item" id="theme-light">
+              <span class="checkmark" id="check-light">✓</span> Light Theme
+            </div>
+            <div class="dropdown-item" id="theme-dark">
+              <span class="checkmark" id="check-dark">✓</span> Dark Theme
+            </div>
+            <div class="dropdown-item active-theme" id="theme-system">
+              <span class="checkmark" id="check-system">✓</span> System Theme
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Application Workspace -->
+      <div class="window-body">
+        <!-- Sidebar Explorer (Left) -->
+        <aside class="sidebar-tree">
+          <div class="tree-header">Folders</div>
+          <div class="tree-container">
+            
+    <ul class="tree-list">
+      <li class="tree-node">
+        <span class="tree-toggle">-</span>
+        <a href="/" class="tree-content">
+          <span class="icon icon-computer"></span>
+          KCH:\
+        </a>
+        <ul class="tree-list">
+          <!-- info.txt -->
+          <li class="tree-node">
+            <a href="/" class="tree-content ">
+              <span class="icon icon-document"></span>
+              info.txt
+            </a>
+          </li>
+          
+          <!-- articles folder -->
+          <li class="tree-node">
+            <span class="tree-toggle">-</span>
+            <span class="tree-content">
+              <span class="icon icon-folder-open"></span>
+              articles
+            </span>
+            <ul class="tree-list" style="display: block;">
+              
+      <li class="tree-node">
+        <a href="/articles/article-1.html" class="tree-content active">
+          <span class="icon icon-document"></span>
+          Rebbax
+        </a>
+      </li>
+    
+      <li class="tree-node">
+        <a href="/articles/article-2.html" class="tree-content ">
+          <span class="icon icon-document"></span>
+          Article 2
+        </a>
+      </li>
+    
+            </ul>
+          </li>
+          
+          <!-- utils folder -->
+          <li class="tree-node">
+            <span class="tree-toggle">+</span>
+            <span class="tree-content">
+              <span class="icon icon-folder"></span>
+              utils
+            </span>
+            <ul class="tree-list" style="display: none;">
+              
+      <li class="tree-node">
+        <a href="https://vitejs.dev" class="tree-content " target="_blank" rel="noopener noreferrer">
+          <span class="icon icon-executable"></span>
+          Vite
+        </a>
+      </li>
+    
+      <li class="tree-node">
+        <a href="https://www.typescriptlang.org" class="tree-content " target="_blank" rel="noopener noreferrer">
+          <span class="icon icon-executable"></span>
+          TypeScript
+        </a>
+      </li>
+    
+      <li class="tree-node">
+        <a href="https://packard-belle.github.io/packard-belle/" class="tree-content " target="_blank" rel="noopener noreferrer">
+          <span class="icon icon-executable"></span>
+          Retro CSS
+        </a>
+      </li>
+    
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  
+          </div>
+        </aside>
+
+        <!-- Divider -->
+        <div class="window-divider"></div>
+
+        <!-- Content Area (Right) -->
+        <main class="content-area">
+          <div class="content-frame">
+            <h1>Rebbax</h1>
+<p><em>Published: May 30, 2026</em><br><em>Author: Krzysztof Chrobak</em></p>
+<hr>
+<p>[PLACEHOLDER]</p>
+<p>This is an obvious placeholder for my first article. I typically publish about
+two articles a year in Markdown.</p>
+
+          </div>
+        </main>
+      </div>
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <p class="status-text">For Help, press F1</p>
+        <p class="status-pane" id="status-coords">Ln 1, Col 1</p>
+        <p class="status-pane hidden-sm">NUM</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
