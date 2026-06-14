@@ -1,0 +1,26 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #222222;
+    --link-color: #0066cc;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #e0e0e0;
+        --link-color: #4da6ff;
+    }
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, Helvetica, sans-serif;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    color: var(--link-color);
+}
