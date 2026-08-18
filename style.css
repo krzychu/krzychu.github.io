@@ -24,3 +24,7 @@ body {
 a {
     color: var(--link-color);
 }
+
+.article-intro {
+    font-style: italic;
+}
