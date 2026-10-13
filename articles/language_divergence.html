@@ -7807,18 +7807,19 @@ a.anchor-link {
 <p>$x_{i} = x_{i-1} + F(x)$</p>
 <p>where $F(x)$ hides the entire complexity of the transformer architecture. The $x_1, x_2, x_3, ..., x_n$ is called the <em>residual stream</em>.</p>
 <p>After processing the last token of the prompt, the residual stream encodes the meaning of the entire prompt.</p>
-<p>Imagine the same prompt written in two languages ($E$ denotes tokenization and embedding):</p>
+<h2 id="Hypothesis">Hypothesis<a class="anchor-link" href="#Hypothesis">¶</a></h2><p>Imagine the same prompt written in two languages ($E$ denotes tokenization and embedding):</p>
 <p>$x_0 = E(\text{"Modern space telescopes equipped with sensitive infrared detectors allow astronomers to"})$</p>
 <p>$y_0 = E(\text{"Nowoczesne teleskopy kosmiczne wyposażone w czułe detektory podczerwieni umożliwiają"})$</p>
 <p>Processing these prompts will result in two distinct residual streams:</p>
 <p>$x_0, x_1, ..., x_n$</p>
 <p>$y_0, y_1, ..., y_n$</p>
-<h2 id="Hypothesis">Hypothesis<a class="anchor-link" href="#Hypothesis">¶</a></h2><p>The layer-wise cosine similarity between residual streams for the <strong>last token</strong> of the same prompt in different languages should be inverse-U shaped:</p>
+<p>The per-layer cosine similarity between residual streams $x_0^Ty_0, x_1^Ty_1, ..., x_n^Ty_n$ for the <strong>last token</strong> of the same prompt in different languages should be inverse-U shaped:</p>
 <ul>
-<li>In the first few layers LLM figures out the prompt structure -&gt; low similarity between languages</li>
-<li>In the most of the internal layers, LLM operates on the prompt <em>meaning</em> -&gt; high similarity between languages</li>
-<li>In the output layers, the LLM gathers the context for answer generation -&gt; the response is language-dependent so the similarity is low again</li>
+<li>In the first few layers LLM figures out the prompt structure which differs between languages -&gt; low similarity</li>
+<li>In the most of the internal layers, LLM operates on the prompt <em>meaning</em> which is the same in both languages -&gt; high similarity</li>
+<li>In the output layers, the LLM calculates the probabilities for the first generated token -&gt; low similarity</li>
 </ul>
+<p>The per-layer similarity for a single pair of prompts will likely be too noisy to observe this effect, so we'll process 1000 of sentence pairs and plot the <em>average</em> per-layer similarity.</p>
 </div>
 </div>
 </div>
@@ -8052,9 +8053,10 @@ Q: Country: Italy. Capital: Rome. | Country: France. Capital: A: Paris. | Countr
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Results">Results<a class="anchor-link" href="#Results">¶</a></h2><p>The shape of the curve is rougly reverse-U-shaped, so our starting hypotheisis is confirmed.</p>
+<h2 id="Results">Results<a class="anchor-link" href="#Results">¶</a></h2><p>The shape of the curve is rougly reverse-U-shaped, so our starting hypotheisis is confirmed: LLMs do indeed abstract away the language in which the prompt was formulated and</p>
 <h2 id="Lessons-Learned">Lessons Learned<a class="anchor-link" href="#Lessons-Learned">¶</a></h2><ul>
 <li>Model choice matters a lot. I was unable to get this to work with instruction-tuned model because the special tokens from the prompt template were introducing extra noise.</li>
+<li>LLM residual stream is surprisingly sensitive to what exactly the last token is. When the sentence pairs ended with a period, the language erasure effect was much noisier. Initially I expected the meaning of the prompt to influence the last token embedding more heavily.</li>
 <li>MLX is great and unlike pytorch works efficiently on the Mac out of the box.</li>
 <li><code>HF_HUB_OFFLINE_MODE=1 command ...</code> makes working with Huggingface libraries much less annoying.</li>
 <li><code>float16</code> overflows too easily.</li>
