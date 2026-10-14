@@ -8058,7 +8058,7 @@ Q: Country: Italy. Capital: Rome. | Country: France. Capital: A: Paris. | Countr
 <li>Model choice matters a lot. I was unable to get this to work with instruction-tuned model because the special tokens from the prompt template were introducing extra noise.</li>
 <li>LLM residual stream is surprisingly sensitive to what exactly the last token is. When the sentence pairs ended with a period, the language erasure effect was much noisier. Initially I expected the meaning of the prompt to influence the last token embedding more heavily.</li>
 <li>MLX is great and unlike pytorch works efficiently on the Mac out of the box.</li>
-<li><code>HF_HUB_OFFLINE_MODE=1 command ...</code> makes working with Huggingface libraries much less annoying.</li>
+<li><code>HF_HUB_OFFLINE=1 command ...</code> makes working with Huggingface libraries much less annoying.</li>
 <li><code>float16</code> overflows too easily.</li>
 </ul>
 </div>
