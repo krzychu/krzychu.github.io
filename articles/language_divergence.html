@@ -8053,7 +8053,7 @@ Q: Country: Italy. Capital: Rome. | Country: France. Capital: A: Paris. | Countr
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Results">Results<a class="anchor-link" href="#Results">¶</a></h2><p>The shape of the curve is rougly reverse-U-shaped, so our starting hypotheisis is confirmed: LLMs do indeed abstract away the language in which the prompt was formulated and</p>
+<h2 id="Results">Results<a class="anchor-link" href="#Results">¶</a></h2><p>The shape of the curve is rougly reverse-U-shaped, so our starting hypotheisis is confirmed: LLMs do indeed abstract away the language in which the prompt was formulated.</p>
 <h2 id="Lessons-Learned">Lessons Learned<a class="anchor-link" href="#Lessons-Learned">¶</a></h2><ul>
 <li>Model choice matters a lot. I was unable to get this to work with instruction-tuned model because the special tokens from the prompt template were introducing extra noise.</li>
 <li>LLM residual stream is surprisingly sensitive to what exactly the last token is. When the sentence pairs ended with a period, the language erasure effect was much noisier. Initially I expected the meaning of the prompt to influence the last token embedding more heavily.</li>
