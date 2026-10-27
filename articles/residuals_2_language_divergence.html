@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>kchrobak.pl</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+    <p>
+        <a href="../index.html">⏎ kchrobak.pl</a>
+    </p>
+
+<h1 id="touching-the-divine-part-2-language-divergence">Touching the
+Divine Part 2: Language Divergence</h1>
+<p><em>This is the second part of a series about messing with LLM
+internals; Read <a href="residuals_1_intro.html">the previous part</a>
+first.</em></p>
+<p>The point of this exercise is to experimentally verify the intuition
+that the kind of natural language the prompt is formulated in does not
+matter in the depths of an LLM, because internal layers of the model
+deal with abstract <em>concepts</em> and not specific <em>words</em>.
+We’ll check that by comparing the internal representations of the same
+set of prompts in two natural languages, Polish and English.</p>
+<h2 id="hypothesis">Hypothesis</h2>
+<p>Take the same prompt written in two different languages:</p>
+<ul>
+<li>English: “Modern space telescopes equipped with sensitive infrared
+detectors allow astronomers to”</li>
+<li>Polish: “Nowoczesne teleskopy kosmiczne wyposażone w czułe detektory
+podczerwieni umożliwiają astronomom”</li>
+</ul>
+<p>Processing these prompts will result in two distinct residual streams
+(for the last prompt token):</p>
+<p><span
+class="math inline"><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, ..., <em>x</em><sub><em>n</em></sub></span></p>
+<p><span
+class="math inline"><em>y</em><sub>1</sub>, <em>y</em><sub>2</sub>, ..., <em>y</em><sub><em>n</em></sub></span></p>
+<p>We’ll be calculating cosine similarity between various residual
+vectors, so from this point on assume they were normalized (all are of
+length 1).</p>
+<p>The per-layer cosine similarity <span
+class="math inline"><em>x</em><sub>1</sub><sup><em>T</em></sup><em>y</em><sub>1</sub>, <em>x</em><sub>2</sub><sup><em>T</em></sup><em>y</em><sub>2</sub>, ..., <em>x</em><sub><em>n</em></sub><sup><em>T</em></sup><em>y</em><sub><em>n</em></sub></span>
+between the residual streams of the same prompt in different languages
+should be inverse-U shaped:</p>
+<ul>
+<li>In the first few layers, the LLM figures out the prompt structure,
+which differs between languages → low similarity</li>
+<li>In most of the internal layers, the LLM operates on the prompt
+<em>meaning</em>, which is the same in both languages → high
+similarity</li>
+<li>In the output layers, the LLM calculates the probabilities for the
+first generated token → low similarity</li>
+</ul>
+<h2 id="experiment">Experiment</h2>
+<p>The sections below document the experiment in detail. I won’t publish
+the exact code because:</p>
+<ul>
+<li>I have better things to do than cleaning up the jupyter notebook
+with the experiment.</li>
+<li>Instructions in the sections below are enough to reproduce the
+result, just ask your friendly AI agent.</li>
+<li>If you want to actually learn this stuff you should implement it
+yourself anyway.</li>
+</ul>
+<h3 id="data">Data</h3>
+<p>The per-layer similarity for a single pair of prompts will likely be
+too noisy to observe the language divergence effect, so I ran the
+experiment on 265 sentences and averaged the results.</p>
+<p>The sentences I used came straight from a more powerful LLM. A bunch
+of examples:</p>
+<ul>
+<li>Polish
+<ol type="1">
+<li>Nowoczesne teleskopy kosmiczne wyposażone w czułe detektory
+podczerwieni umożliwiają astronomom</li>
+<li>Bakterie żyjące w pobliżu kominów hydrotermalnych na dnie
+oceanu</li>
+<li>Współczesna epistemologia bada fundamentalne granice ludzkiego
+poznania oraz</li>
+<li>Budowa średniowiecznych katedr gotyckich wymagała niezwykłej</li>
+<li>Zjawisko nadprzewodnictwa wysokotemperaturowego otwiera perspektywy
+dla bezstratnego</li>
+</ol></li>
+<li>English
+<ol type="1">
+<li>Modern space telescopes equipped with sensitive infrared detectors
+allow astronomers to</li>
+<li>Bacteria living near hydrothermal vents on the ocean floor</li>
+<li>Contemporary epistemology investigates the fundamental limits of
+human cognition and</li>
+<li>The construction of medieval Gothic cathedrals required
+extraordinary</li>
+<li>The phenomenon of high-temperature superconductivity opens prospects
+for lossless</li>
+</ol></li>
+</ul>
+<p>The sentences are cut in half for three reasons:</p>
+<ul>
+<li>To make the experiment shorter. My MacBook Air M4 is not exactly an
+AI workstation.</li>
+<li>To avoid every sentence in both languages ending with the exact same
+token (a period <code>.</code>). Because we only inspect the residual
+stream of the final token, ending every prompt with a period would
+artificially inflate early layer similarity and add noise in deeper
+layers.</li>
+<li>To help the really dumb model I used produce clear residuals. The
+completion is more obvious if the sentence is broken in the middle
+instead of being complete, compare:
+<ul>
+<li>“Modern space telescopes equipped with sensitive infrared detectors
+allow astronomers to” → you can probably guess what’s coming next.</li>
+<li>“Modern space telescopes equipped with sensitive infrared detectors
+allow astronomers to see through clouds of dust.” → the sentence is
+complete, hard to tell what the next sentence will be.</li>
+</ul></li>
+</ul>
+<h3 id="baseline">Baseline</h3>
+<p>Let’s say that the cosine similarity between 2000-dimensional unit
+vectors is 0.08. Is that a lot? If you, like me, have spent all of your
+life in humble 3 dimensions you probably don’t have intuitions about
+that, so we need a baseline to compare the similarities against.</p>
+<p>The residual comparison machinery can be used to establish such a
+baseline. At any given layer, let <span
+class="math inline"><em>u</em><sub>1</sub>, <em>u</em><sub>2</sub>, ..., <em>u</em><sub><em>m</em></sub></span>
+and <span
+class="math inline"><em>v</em><sub>1</sub>, <em>v</em><sub>2</sub>, ..., <em>v</em><sub><em>m</em></sub></span>
+be the normalized residuals across all <span
+class="math inline"><em>m</em> = 265</span> English and Polish prompts.
+If we take a random permutation <span
+class="math inline"><em>σ</em></span> of <span
+class="math inline">{1, ..., <em>m</em>}</span>, then <span
+class="math inline"><em>u</em><sub>1</sub><sup><em>T</em></sup><em>v</em><sub><em>σ</em>(1)</sub>, <em>u</em><sub>2</sub><sup><em>T</em></sup><em>v</em><sub><em>σ</em>(2)</sub>, ..., <em>u</em><sub><em>m</em></sub><sup><em>T</em></sup><em>v</em><sub><em>σ</em>(<em>m</em>)</sub></span>
+compares <em>random</em> pairs of prompts at that layer. Repeating this
+across all layers gives us the baseline we need to judge whether the
+similarities we’ll see are significant or just random noise.</p>
+<h3 id="model">Model</h3>
+<p>Because of the constrained compute I have, I decided to run this
+experiment on a really dumb 1.5B parameter model:
+<code>mlx-community/Qwen2.5-1.5B-4bit</code> (28 layers,
+1536-dimensional residual stream). This particular LLM has the following
+useful characteristics:</p>
+<ul>
+<li>Already converted to work nicely with MLX, the ML framework from
+Apple optimized for their hardware (more on that below).</li>
+<li>So small that even my laptop can process multi-prompt batches
+quickly.</li>
+<li>Not trained for instruction following. There’s no chat template, no
+special tokens, etc. It just tries to complete whatever the prompt
+was.</li>
+</ul>
+<h3 id="inference">Inference</h3>
+<p>To run this experiment I needed a program that takes the data + model
+weights and produces the per-language residuals to compare. At first I
+tried Huggingface <code>transformers</code> with residuals dumped via
+<code>output_hidden_states=True</code>, but it decided to start the
+process by dequantizing the model from 4 to 16 bit to ensure no RAM
+stays empty, so I pivoted to using <a
+href="https://opensource.apple.com/projects/mlx/">MLX</a> directly.</p>
+<p>MLX does not have an easy-to-use equivalent of
+<code>output_hidden_states=True</code>, so I had to undertake a tiny
+side quest of writing the forward pass by hand. Since we only need the
+<em>prefill</em> stage (no autoregressive token generation loop
+required), it turned out to be just a few lines of code: embed the input
+tokens, loop over <code>model.model.layers</code> with a causal mask,
+and record the last-token vector after each layer.</p>
+<h2 id="results">Results</h2>
+<h3 id="first-attempt">First Attempt</h3>
+<p>When I ran my experiment for the first time, I got this unimpressive
+result:</p>
+<p><img src="broken_divergence.svg" /></p>
+<p>The baseline looks all wrong! Why would the similarity between
+residuals for random pairs of prompts grow with the layer number?</p>
+<p>Turns out LLMs are extremely <em>anisotropic</em>: they project
+concepts into a very narrow cone, so if not centered, all residual
+vectors end up similar, regardless of what the prompt was, which
+explains the bizarre observed baseline behavior.</p>
+<p>Once you know this, which took me a long while to figure out, the fix
+is easy: calculate the mean English and Polish residual at each layer,
+and subtract it from all residuals for prompts in the corresponding
+language before vector normalization.</p>
+<h3 id="second-attempt">Second Attempt</h3>
+<p>Once the residuals were centered and normalized, the results formed
+the beautiful curve below:</p>
+<p><img src="divergence.svg" /></p>
+<p>This exactly matches our initial hypothesis!</p>
+<p>Have we done it? Have we peeked inside the mind of the
+proto-machine-god? This is a very basic exercise, but it clearly shows
+that it’s possible to reason about simple LLM internals, formulate
+hypotheses and then check them experimentally, as if LLMs were one of
+many normal technologies and not some alien species we conjured into
+being on a GPU…</p>
+<h2 id="implementation-notes">Implementation Notes</h2>
+<ul>
+<li>MLX is super pleasant to work with, and conceptually compatible with
+Jax if some actual heavy-lifting is needed.</li>
+<li>MLX framework seamlessly integrates with huggingface, so loading a
+model and tokenizer is a single line of code.</li>
+<li>By default huggingface will always phone home each time you load a
+model or a dataset, even if what you need is already cached locally.
+Setting <code>HF_HUB_OFFLINE=1</code> in the environment disables this
+little bit of additional surveillance.</li>
+<li>LLMs are no longer random when you sample with <code>argmax</code>
+(temperature = 0), so it’s actually pretty easy to write unit tests for
+inference.</li>
+<li>Don’t think how to make progress bars, just use
+<code>tqdm</code>.</li>
+</ul>
+
+
+</body>
+
+</html>
