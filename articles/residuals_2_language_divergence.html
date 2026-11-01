@@ -14,6 +14,179 @@
         <a href="../index.html">⏎ kchrobak.pl</a>
     </p>
 
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>residuals_2_language_divergence</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
 <h1 id="touching-the-divine-part-2-language-divergence">Touching the
 Divine Part 2: Language Divergence</h1>
 <p><em>This is the second part of a series about messing with LLM
@@ -35,15 +208,13 @@ podczerwieni umożliwiają astronomom”</li>
 </ul>
 <p>Processing these prompts will result in two distinct residual streams
 (for the last prompt token):</p>
-<p><span
-class="math inline"><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, ..., <em>x</em><sub><em>n</em></sub></span></p>
-<p><span
-class="math inline"><em>y</em><sub>1</sub>, <em>y</em><sub>2</sub>, ..., <em>y</em><sub><em>n</em></sub></span></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mn>2</mn></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msub><mi>x</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">x_1, x_2, ..., x_n</annotation></semantics></math></p>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>2</mn></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">y_1, y_2, ..., y_n</annotation></semantics></math></p>
 <p>We’ll be calculating cosine similarity between various residual
 vectors, so from this point on assume they were normalized (all are of
 length 1).</p>
-<p>The per-layer cosine similarity <span
-class="math inline"><em>x</em><sub>1</sub><sup><em>T</em></sup><em>y</em><sub>1</sub>, <em>x</em><sub>2</sub><sup><em>T</em></sup><em>y</em><sub>2</sub>, ..., <em>x</em><sub><em>n</em></sub><sup><em>T</em></sup><em>y</em><sub><em>n</em></sub></span>
+<p>The per-layer cosine similarity
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>x</mi><mn>1</mn><mi>T</mi></msubsup><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><msubsup><mi>x</mi><mn>2</mn><mi>T</mi></msubsup><msub><mi>y</mi><mn>2</mn></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msubsup><mi>x</mi><mi>n</mi><mi>T</mi></msubsup><msub><mi>y</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">x_1^Ty_1, x_2^Ty_2, ..., x_n^Ty_n</annotation></semantics></math>
 between the residual streams of the same prompt in different languages
 should be inverse-U shaped:</p>
 <ul>
@@ -124,16 +295,18 @@ vectors is 0.08. Is that a lot? If you, like me, have spent all of your
 life in humble 3 dimensions you probably don’t have intuitions about
 that, so we need a baseline to compare the similarities against.</p>
 <p>The residual comparison machinery can be used to establish such a
-baseline. At any given layer, let <span
-class="math inline"><em>u</em><sub>1</sub>, <em>u</em><sub>2</sub>, ..., <em>u</em><sub><em>m</em></sub></span>
-and <span
-class="math inline"><em>v</em><sub>1</sub>, <em>v</em><sub>2</sub>, ..., <em>v</em><sub><em>m</em></sub></span>
-be the normalized residuals across all <span
-class="math inline"><em>m</em> = 265</span> English and Polish prompts.
-If we take a random permutation <span
-class="math inline"><em>σ</em></span> of <span
-class="math inline">{1, ..., <em>m</em>}</span>, then <span
-class="math inline"><em>u</em><sub>1</sub><sup><em>T</em></sup><em>v</em><sub><em>σ</em>(1)</sub>, <em>u</em><sub>2</sub><sup><em>T</em></sup><em>v</em><sub><em>σ</em>(2)</sub>, ..., <em>u</em><sub><em>m</em></sub><sup><em>T</em></sup><em>v</em><sub><em>σ</em>(<em>m</em>)</sub></span>
+baseline. At any given layer, let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo><msub><mi>u</mi><mn>2</mn></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msub><mi>u</mi><mi>m</mi></msub></mrow><annotation encoding="application/x-tex">u_1, u_2, ..., u_m</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>,</mo><msub><mi>v</mi><mn>2</mn></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msub><mi>v</mi><mi>m</mi></msub></mrow><annotation encoding="application/x-tex">v_1, v_2, ..., v_m</annotation></semantics></math>
+be the normalized residuals across all
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mn>265</mn></mrow><annotation encoding="application/x-tex">m = 265</annotation></semantics></math>
+English and Polish prompts. If we take a random permutation
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
+of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><mi>m</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{1, ..., m\}</annotation></semantics></math>,
+then
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>u</mi><mn>1</mn><mi>T</mi></msubsup><msub><mi>v</mi><mrow><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo>,</mo><msubsup><mi>u</mi><mn>2</mn><mi>T</mi></msubsup><msub><mi>v</mi><mrow><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo></mrow></msub><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><msubsup><mi>u</mi><mi>m</mi><mi>T</mi></msubsup><msub><mi>v</mi><mrow><mi>σ</mi><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo stretchy="false" form="postfix">)</mo></mrow></msub></mrow><annotation encoding="application/x-tex">u_1^Tv_{\sigma(1)}, u_2^Tv_{\sigma(2)}, ..., u_m^Tv_{\sigma(m)}</annotation></semantics></math>
 compares <em>random</em> pairs of prompts at that layer. Repeating this
 across all layers gives us the baseline we need to judge whether the
 similarities we’ll see are significant or just random noise.</p>
@@ -209,6 +382,8 @@ inference.</li>
 <li>Don’t think how to make progress bars, just use
 <code>tqdm</code>.</li>
 </ul>
+</body>
+</html>
 
 
 </body>

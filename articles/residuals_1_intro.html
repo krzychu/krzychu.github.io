@@ -14,6 +14,179 @@
         <a href="../index.html">⏎ kchrobak.pl</a>
     </p>
 
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>residuals_1_intro</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
 <h1 id="touching-the-divine-part-1-the-residuals">Touching the Divine
 Part 1: The Residuals</h1>
 <h2 id="situational-awareness-s">“Situational Awareness” /s</h2>
@@ -77,11 +250,13 @@ Bavaria”, splits it into a list of subword chunks, for example
 (the weird <code>Ġ</code> character is a replacement for a leading space
 in the Llama tokenizer, it does not matter, move on), and maps them to
 integer token IDs.</li>
-<li>Embedding - translates the <span
-class="math inline"><em>k</em></span> input tokens into a <span
-class="math inline"><em>k</em> × <em>d</em></span> matrix, where <span
-class="math inline"><em>d</em></span> is the <em>model
-dimension</em>.</li>
+<li>Embedding - translates the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+input tokens into a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>×</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">k \times d</annotation></semantics></math>
+matrix, where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
+is the <em>model dimension</em>.</li>
 <li>Prefill - applies the sequence of Transformer layers (self-attention
 + MLP, labeled “Transformer + MLP” in the diagram below) to the
 embedding matrix.</li>
@@ -92,25 +267,28 @@ it</em>.</li>
 <h2 id="residual-stream">Residual Stream</h2>
 <p>More formally (but still comfortably handwavey), during the prefill
 each LLM layer performs the following:</p>
-<p><span
-class="math display"><em>h</em><sub><em>i</em> + 1</sub> = <em>h</em><sub><em>i</em></sub> + <em>F</em><sub><em>i</em></sub>(<em>h</em><sub><em>i</em></sub>)</span></p>
-<p>where <span class="math inline"><em>h</em><sub>1</sub></span> is the
-initial token embeddings matrix and <span
-class="math inline"><em>F</em><sub><em>i</em></sub></span> is the <span
-class="math inline"><em>i</em></span>-th layer. Notice the <span
-class="math inline">+</span> sign: instead of overwriting the matrix,
-each layer <em>adds</em> a residual update to the existing
-representation.</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>h</mi><mi>i</mi></msub><mo>+</mo><msub><mi>F</mi><mi>i</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>h</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">h_{i+1} = h_i + F_i(h_i)</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mn>1</mn></msub><annotation encoding="application/x-tex">h_1</annotation></semantics></math>
+is the initial token embeddings matrix and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi>i</mi></msub><annotation encoding="application/x-tex">F_i</annotation></semantics></math>
+is the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+layer. Notice the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>+</mi><annotation encoding="application/x-tex">+</annotation></semantics></math>
+sign: instead of overwriting the matrix, each layer <em>adds</em> a
+residual update to the existing representation.</p>
 <p>While every token row has its own residual stream, for the purpose of
 understanding and modifying the LLM’s behavior, the last row of the
 matrix—corresponding to the last prompt token—is of special interest to
 us. Because causal attention only looks backward, the LLM is trained to
 aggregate the full context of the prompt into that final row right
-before predicting the next token. Let’s denote the last row of the <span
-class="math inline"><em>h</em><sub><em>i</em></sub></span> matrix as
-<span class="math inline"><em>x</em><sub><em>i</em></sub></span>.</p>
-<p>The sequence of vectors <span
-class="math inline"><em>x</em><sub>1</sub>, …, <em>x</em><sub><em>n</em></sub></span>
+before predicting the next token. Let’s denote the last row of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mi>i</mi></msub><annotation encoding="application/x-tex">h_i</annotation></semantics></math>
+matrix as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>i</mi></msub><annotation encoding="application/x-tex">x_i</annotation></semantics></math>.</p>
+<p>The sequence of vectors
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">x_1, \ldots, x_{n}</annotation></semantics></math>
 across the model’s layers is our “residual stream”.</p>
 <p>See the diagram below for the visual explanation:</p>
 <figure>
@@ -135,6 +313,8 @@ there’s a <a href="https://arxiv.org/abs/2406.11717">paper from 2024</a>
 proving this, but let’s pretend we don’t know that.)</li>
 </ul>
 <p>In the next parts, we’ll test these hypotheses.</p>
+</body>
+</html>
 
 
 </body>
