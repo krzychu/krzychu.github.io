@@ -13,6 +13,11 @@
     }
 }
 
+html {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
@@ -24,6 +29,15 @@ body {
 
 a {
     color: var(--link-color);
+}
+
+img, svg {
+    max-width: 100%;
+    height: auto;
+}
+
+pre {
+    overflow-x: auto;
 }
 
 .article-intro {
